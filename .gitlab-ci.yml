@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025-2026 Pench contributors
+
+stages:
+  - test
+
+unit-tests:
+  stage: test
+  image: ghcr.io/astral-sh/uv:python3.12-bookworm
+  script:
+    - uv run --group dev pytest
+
+tex-smoke:
+  stage: test
+  image: texlive/texlive
+  tags: [docker]
+  before_script:
+    - python3 -m pip install --break-system-packages .
+  script:
+    - |
+      for doctype in article book note ieee-conference; do
+        project=$(pench tex create --parsable \
+          --doctype "$doctype" \
+          --title "Smoke Test $doctype" \
+          --author "CI" \
+          --email "ci@example.org" \
+          --license CC-BY-4.0 \
+          --outdir "$CI_PROJECT_DIR/tmp/smoke")
+        make -C "$project"
+        test -f "$project/smoke-test-$doctype.pdf"
+      done
+  artifacts:
+    when: on_failure
+    expire_in: 1 week
+    paths:
+      - tmp/smoke/

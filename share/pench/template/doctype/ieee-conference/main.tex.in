@@ -1,0 +1,69 @@
+% IEEE conference source. Preserve the IEEEtran layout for your venue.
+% The document's SPDX header is set during project creation by Pench.
+\documentclass[conference]{IEEEtran}
+
+% Add \IEEEoverridecommandlockouts only if \thanks is needed for funding.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\begin{document}
+
+% IEEE conference titles generally should not contain a subtitle.
+\title{@@title@@}
+
+% Repeat \IEEEauthorblockN / \IEEEauthorblockA groups separated by \and
+% for multiple authors. Change the affiliation as necessary.
+\author{\IEEEauthorblockN{@@author@@}
+\IEEEauthorblockA{\textit{@@affiliation@@}\\
+@@email@@}}
+
+\maketitle
+
+\begin{abstract}
+@@abstract@@
+\end{abstract}
+
+\begin{IEEEkeywords}
+@@keywords@@
+\end{IEEEkeywords}
+
+\section{Introduction}
+State the problem and contributions. Cite prior work using numerical
+IEEE references, for example~\cite{lamport1994latex}.
+
+\section{Methodology}
+Explain the experimental setup and provide enough detail to reproduce it.
+For example, write equations using standard LaTeX:
+\begin{equation}
+    E = mc^{2}.
+    \label{eq:example}
+\end{equation}
+
+% Put figure captions below figures and table captions above tables.
+% Prefer figures at the top or bottom of columns and insert after citation.
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\columnwidth]{figures/result.pdf}
+%   \caption{Describe the figure meaningfully.}
+%   \label{fig:result}
+% \end{figure}
+
+\section{Results}
+Present measurements, interpretation, and limitations.
+Refer to Equation~\eqref{eq:example} if relevant.
+
+\section{Conclusion}
+Summarize findings and future work.
+
+% Uncomment for acknowledgments when appropriate.
+% \section*{Acknowledgment}
+% Acknowledge supporting organizations and contributors.
+
+% IEEEtran.bst gives numbered, citation-order references with BibTeX.
+% IEEEtranS.bst is also bundled, but should only be used if required.
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\end{document}

@@ -1,0 +1,39 @@
+% -- Load the document class
+\documentclass[fontsize=12pt,twoside=false,paper=a4]{pencharticle}
+
+% -- Set the page layout
+\RequirePackage{geometry}
+\geometry{headheight=10mm, inner=25mm, top=25mm, bottom=25mm, outer=25mm}
+
+% -- Load the penchcontrol package
+\RequirePackage[
+  license=@@license@@,
+  docid=@@docid@@,
+  version=@@version@@,
+  copyrightyear=@@copyrightyear@@,
+  copyrightholder={@@copyrightholder@@}
+]{penchcontrol}
+
+% -- Title and author information
+\subject{@@subject@@}
+\title{@@title@@}
+\subtitle{@@subtitle@@}
+\author{@@author@@}
+\publishers{@@publishers@@}
+\date{@@date@@}
+
+% -- A BibLaTeX database for the editable starter citation below
+\addbibresource{references.bib}
+
+% -- Content
+\begin{document}
+\pagestyle{main}
+\maketitle
+\tableofcontents
+\section{Introduction}
+Introduce the topic of @@title@@ and its context~\autocite{knuth1984texbook}.
+
+\section{Method}
+Describe the methods and supporting evidence here.
+\printbibliography[heading=bibintoc]
+\end{document}

@@ -1,0 +1,258 @@
+% --------------------------------------------------------------------------------------------------
+% SPDX-License-Identifier: Apache-2.0
+% Copyright (C) 2025 Jayesh Badwaik <jayesh@ambhora.com>
+% --------------------------------------------------------------------------------------------------
+
+% -- The penchcommon package provides definitions and utilities that are
+% -- common across different document types in the Ambhora ecosystem.
+\ProvidesPackage{penchcommon}
+\ProvidesExplPackage
+  {penchcommon} % package name
+  {2025/06/09}   % date
+  {0.1}          % version
+  {Pench Common Package} % description
+
+
+
+% -- Use the penchdesign package for consistent design
+\RequirePackage{penchdesign}
+
+% -- Language Support
+\RequirePackage{polyglossia}
+\setmainlanguage{english}
+
+% -- Smart Quotes
+\RequirePackage{csquotes}
+
+% -- Package to set space between lines
+\RequirePackage{setspace}
+
+% -- Package for inserting CC license information
+\RequirePackage{ccicons}
+
+% -- Add correct metadata to the document
+\PassOptionsToPackage{hypertexnames=true,plainpages=false,pdfpagelabels}{hyperref}
+\RequirePackage{hyperref}
+\RequirePackage{hyperxmp}
+\hypersetup{
+  keeppdfinfo,
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfsubject={\@subject}
+}
+
+% -- Bibliography and Citation Support
+\PassOptionsToPackage
+{sortcites=true,sorting=nyt,bibstyle=alphabetic,citestyle=alphabetic,backend=biber}
+{biblatex}
+\RequirePackage{biblatex}
+
+
+
+
+% --------------------------------------------------------------------------------------------------
+%  Configure Hyperlink Support
+% --------------------------------------------------------------------------------------------------
+\PassOptionsToPackage{capitalize,nameinlink}{cleveref}
+\RequirePackage{cleveref}
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=ambhoraBlue,
+  linkcolor=ambhoraBlue,
+  citecolor=ambhoraGreen
+}
+% --------------------------------------------------------------------------------------------------
+
+
+% --------------------------------------------------------------------------------------------------
+%  Theorem Tools
+% --------------------------------------------------------------------------------------------------
+\RequirePackage{amsthm}
+\RequirePackage{thmtools}
+\PassOptionsToPackage{framemethod=TikZ}{mdframed}
+\RequirePackage{mdframed}
+
+
+\@ifclassloaded{penchbook}{
+  \declaretheoremstyle[
+  numberwithin=chapter,
+  bodyfont=\normalfont,
+  headfont=\normalfont\bfseries,
+  notefont=\normalfont\itshape,
+  preheadhook={
+    \begin{mdframed}[
+      backgroundcolor=ambhoraWhite,innertopmargin =0pt , splittopskip = \topskip, %
+      skipbelow= 6pt, skipabove=6pt, topline=false, bottomline=false,
+      leftline=false, rightline=false
+      ]
+    },
+  postfoothook=\end{mdframed}
+  ]{jstyle}
+}
+{
+  \declaretheoremstyle[
+  bodyfont=\normalfont,
+  headfont=\normalfont\bfseries,
+  notefont=\normalfont\itshape,
+  preheadhook={
+    \begin{mdframed}[
+      backgroundcolor=ambhoraWhite, innertopmargin=0pt , splittopskip=\topskip,
+      skipbelow=6pt, skipabove=6pt, topline=false, bottomline=false,
+      leftline=false,rightline=false
+      ]
+    },
+  postfoothook=\end{mdframed}
+  ]{jstyle}
+}
+
+\declaretheorem[style=jstyle,name = Theorem]{theorem}
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+
+\declaretheorem[style=jstyle,name = Proposition]{proposition}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+
+\declaretheorem[style=jstyle,name = Lemma]{lemma}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+
+\declaretheorem[style=jstyle,name = Definition]{definition}
+\crefname{definition}{definition}{definitions}
+\Crefname{definition}{Definition}{Definitions}
+
+\declaretheorem[style=jstyle,name = Corollary]{corollary}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+
+
+\declaretheorem[style=jstyle,name = Axiom]{axiom}
+\crefname{axiom}{axiom}{axioms}
+\Crefname{axiom}{Axiom}{Axioms}
+
+\declaretheorem[style=remark,name = Note]{note}
+\crefname{note}{note}{notes}
+\Crefname{note}{Note}{Notes}
+
+\declaretheorem[style=remark,name = Remark]{remark}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+
+\declaretheorem[style=remark,name = Notation]{notation}
+\crefname{notation}{notation}{notations}
+\Crefname{notation}{Notation}{Notations}
+
+\declaretheorem[style=ujstyle,name = Theorem]{theorem*}
+\declaretheorem[style=ujstyle,name = Proposition]{proposition*}
+\declaretheorem[style=ujstyle,name = Lemma]{lemma*}
+\declaretheorem[style=ujstyle,name = Definition]{definition*}
+\declaretheorem[style=ujstyle,name = Corollary]{corollary*}
+\declaretheorem[style=ujstyle,name = Axiom]{axiom*}
+\declaretheorem[style=remark,name = Note]{note*}
+\declaretheorem[style=remark,name = Remark]{remark*}
+\declaretheorem[style=remark,name = Notation]{notation*}
+
+
+
+% --------------------------------------------------------------------------------------------------
+% Floats and Environment Tools
+% --------------------------------------------------------------------------------------------------
+\RequirePackage{graphicx}
+\RequirePackage{newfloat}
+
+\PassOptionsToPackage{labelfont={bf,sf},labelsep=space}{caption}
+\RequirePackage{caption}
+
+\RequirePackage{float}
+\RequirePackage{subcaption}
+
+\@ifclassloaded{penchbook}{
+  \DeclareFloatingEnvironment[fileext=frm,placement={!ht},name=Equation,within=chapter]{eqfloat}
+}{
+  \DeclareFloatingEnvironment[fileext=frm,placement={!ht},name=Equation]{eqfloat}
+}
+
+\captionsetup[eqfloat]{labelfont=bf}
+
+\NewDocumentEnvironment{eqcap}{m}{\begin{eqfloat}[H]}{\caption{#1}\end{eqfloat}}
+
+\NewDocumentEnvironment{framedeqcap}{m}
+{\begin{eqfloat}[H]\begin{mdframed}[roundcorner=5pt,linewidth=1pt]}
+{\caption{#1}\end{mdframed}\end{eqfloat}}
+
+
+
+% --------------------------------------------------------------------------------------------------
+% Section Title Formatting
+% --------------------------------------------------------------------------------------------------
+
+\RequirePackage{relsize}
+\RequirePackage{ifthen}
+
+% Set Font Size of Section Title Text
+\addtokomafont{section}{\fontsize{2ex}{2ex}\selectfont}
+
+% Set font size of Section Number Text
+\newkomafont{sectionnumber}{\fontsize{3ex}{3ex}\selectfont\rmfamily}
+
+% Format for Section Number
+\renewcommand\sectionformat{\usekomafont{sectionnumber}{\thesection\autodot}\quad}
+
+% Format for Displaying the Section/Subsection Title
+\renewcommand\sectionlinesformat[4]{
+  \ifthenelse{
+    \equal{\detokenize{#1}}{\detokenize{section}}
+  }{
+    \makebox[1em][l]{\rule[-1ex]{\textwidth}{1pt}}
+  }{
+  }
+  \@hangfrom{\hskip #2#3}{#4}
+}
+% --------------------------------------------------------------------------------------------------
+
+
+% --------------------------------------------------------------------------------------------------
+% Date Formatting
+% --------------------------------------------------------------------------------------------------
+\RequirePackage[english]{datetime2}
+\RequirePackage{expl3}
+
+% -- Check if the date is in ISO 8601 format, if not throw an error
+% -- If the date is in ISO format, convert it to human-readable format
+% -- and store it in \@date
+\AtEndPreamble{%
+  \RequirePackage{expl3}
+  \RequirePackage{etoolbox}
+  \ExplSyntaxOn
+  \makeatletter
+  \edef\rawdate{\@date} % Expand \@date to a regular string
+  \makeatother
+
+  \msg_new:nnn{ambhoratools}{invalid-format}{
+  Use~of~penchcommon~package~requires~date~to~be~in~ISO~format,~
+  e.g.,~`\date{2025-06-08}`.~You~instead~provided~`#1`~when~using~the~\date~command.
+  }
+
+  \msg_new:nnn{ambhoratools}{logmessage}{
+  The~date~is~valid:~#1.
+  }
+
+  \regex_match:nVTF { ^\d{4}-\d{2}-\d{2}$ } { \rawdate }
+  {\msg_info:nnV {ambhoratools} {logmessage}{\rawdate}}
+  {\msg_error:nnV {ambhoratools} {invalid-format}{\rawdate}}
+  \ExplSyntaxOff
+
+  % -- Convert ISO 8601 date to DTM format
+  \def\extractyearfromiso#1-#2-#3\relax{#1}
+  \def\extractmonthfromiso#1-#2-#3\relax{#2}
+  \def\extractdayfromiso#1-#2-#3\relax{#3}
+  \edef\yearpart{\expandafter\extractyearfromiso\@date\relax}%
+  \edef\monthpart{\expandafter\extractmonthfromiso\@date\relax}%
+  \edef\daypart{\expandafter\extractdayfromiso\@date\relax}%
+  \newcommand{\humandate}{%
+  \DTMdisplaydate{\yearpart}{\monthpart}{\daypart}{-1}}%
+  \gdef\@isodate{\@date}
+  \def\@date{\humandate}
+}
+

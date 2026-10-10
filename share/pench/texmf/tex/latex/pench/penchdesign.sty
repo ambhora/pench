@@ -1,0 +1,84 @@
+% --------------------------------------------------------------------------------------------------
+% SPDX-License-Identifier: Apache-2.0
+% Copyright (C) 2025 Jayesh Badwaik <jayesh@ambhora.com>
+% --------------------------------------------------------------------------------------------------
+\ProvidesPackage{penchdesign}
+
+% The penchdesign package is designed to provide a consistent design
+% framework for documents in the Ambhora ecosystem. It includes settings for
+% colors, fonts, and other design elements that align with the Ambhora brand.
+
+% -- Set the page layout
+\RequirePackage{geometry}
+\geometry{headheight=10mm, inner=25mm, top=25mm, bottom=25mm, outer=25mm}
+
+% --------------------------------------------------------------------------------------------------
+% Language and Font Support
+
+% -- Enabling fontspec and microtype for better typography
+\RequirePackage{fontspec}
+\PassOptionsToPackage{final}{microtype}
+\RequirePackage{microtype}
+\RequirePackage{unicode-math}
+
+% -- Use preferred design fonts when installed, with portable TeX Live fallbacks.
+% The alternative OTF files ship with TeX Live and need no system font install.
+\IfFileExists{texgyrepagella-regular.otf}
+  {\setmainfont{TeX Gyre Pagella}}
+  {\setmainfont{lmroman10-regular.otf}}
+\IfFileExists{AlegreyaSans-Regular.ttf}
+  {\setsansfont{Alegreya Sans}}
+  {\setsansfont{lmsans10-regular.otf}}
+\IfFileExists{SourceCodePro-Regular.otf}
+  {\setmonofont[Scale=0.75]{Source Code Pro}}
+  {\setmonofont[Scale=0.75]{lmmono10-regular.otf}}
+
+% -- Math uses Euler and named glyph-range fonts if available.
+\IfFileExists{Euler-Math.otf}
+  {\setmathfont[Scale=MatchLowercase]{Euler Math}}
+  {\setmathfont{latinmodern-math.otf}}
+\IfFileExists{texgyrepagella-math.otf}
+  {\setmathfont[range={bb},Scale=MatchLowercase]{TeX Gyre Pagella Math}}
+  {}
+\IfFileExists{texgyrebonum-math.otf}
+  {\setmathfont[range={scr,bfscr},Scale=MatchLowercase]{TeX Gyre Bonum Math}}
+  {}
+\IfFileExists{xits-math.otf}
+  {\setmathfont[range=\setminus,Scale=MatchLowercase]{XITS Math}}
+  {}
+
+% -- Setting line spacing
+\linespread{1.4}
+% --------------------------------------------------------------------------------------------------
+
+
+% --------------------------------------------------------------------------------------------------
+% Brand Colors
+\RequirePackage{xcolor}
+
+% -- Primary colors
+\definecolor{ambhoraBlue}{RGB}{33, 144, 177}
+\definecolor{ambhoraGreen}{RGB}{136, 160, 42}
+\definecolor{ambhoraPink}{RGB}{177, 74, 144}
+
+% -- Secondary colors
+\definecolor{ambhoraPurple}{RGB}{182,167,229}
+\definecolor{ambhoraMint}{RGB}{167,229,182}
+\definecolor{ambhoraSand}{RGB}{229,182,167}
+
+% -- Functional Colors
+\definecolor{ambhoraSuccess}{RGB}{76,175,80} % Green for success
+\definecolor{ambhoraWarning}{RGB}{255,193,7} % Yellow for warnings
+\definecolor{ambhoraError}{RGB}{244,67,54} % Red for errors
+\definecolor{ambhoraInfo}{RGB}{33,150,243} % Blue for informational messages
+
+% -- Background Colors for Functional Elements
+\definecolor{ambhoraSuccessBg}{RGB}{223,245,225} % Light green background for success
+\definecolor{ambhoraWarningBg}{RGB}{255,244,211} % Light yellow background for warnings
+\definecolor{ambhoraErrorBg}{RGB}{252,216,212} % Light red background for errors
+\definecolor{ambhoraInfoBg}{RGB}{217, 237, 255} % Light blue background for informational messages
+
+% --------------------------------------------------------------------------------------------------
+
+
+

@@ -1,0 +1,10 @@
+build:
+  image: texlive/texlive
+  tags: ["docker"]
+  script:
+    - make verbose
+  artifacts:
+    when: on_success
+    expire_in: 1 week
+    paths:
+      - @@slug@@.pdf

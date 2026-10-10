@@ -1,0 +1,6 @@
+# Keep absolute paths: latexmk runs BibTeX from tmp/build, not project root.
+use Cwd qw(getcwd);
+my $pench_texmf = getcwd() . '/texmf//';
+ensure_path('TEXINPUTS', $pench_texmf);
+ensure_path('BSTINPUTS', $pench_texmf);
+ensure_path('BIBINPUTS', $pench_texmf);

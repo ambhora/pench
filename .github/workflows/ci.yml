@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2026 Pench contributors
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pyproject.toml
+      - name: Run tests
+        run: uv run --python "${{ matrix.python-version }}" --group dev pytest
+
+  wheel:
+    name: Build and install wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - name: Build wheel and sdist
+        run: uv build
+      - name: Install wheel outside repository and generate a document
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv venv "$RUNNER_TEMP/pench-install" --python 3.12
+          uv pip install --python "$RUNNER_TEMP/pench-install/bin/python" dist/*.whl
+          mkdir -p "$RUNNER_TEMP/documents"
+          cd "$RUNNER_TEMP/documents"
+          project=$("$RUNNER_TEMP/pench-install/bin/pench" tex create \
+            --doctype ieee-conference --title 'Wheel smoke test' \
+            --author CI --email ci@example.org --license CC-BY-4.0 \
+            --outdir . --parsable)
+          test -f "$project/wheel-smoke-test.tex"
+          test -f "$project/texmf/tex/latex/ieeetran/IEEEtran.cls"
+          test -f "$project/.github/workflows/build.yml"
+      - name: Save distributions
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pench-distributions
+          path: dist/*
+          if-no-files-found: error
+
+  latex-smoke:
+    name: LaTeX / ${{ matrix.doctype }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        doctype: [article, book, note, ieee-conference]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - name: Generate ${{ matrix.doctype }} document
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv sync --no-dev
+          uv run --no-sync pench tex create \
+            --doctype "${{ matrix.doctype }}" \
+            --title "CI ${{ matrix.doctype }}" \
+            --author CI --email ci@example.org --license CC-BY-4.0 \
+            --outdir .ci/generated --parsable
+      - name: Build ${{ matrix.doctype }} with TeX Live
+        uses: xu-cheng/texlive-action@22c04326a5d855880f9d39bb955138bf11c6df80 # v3
+        with:
+          texlive_version: '2025'
+          os: debian
+          run: |
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update -qq
+            apt-get install -y -qq make
+            project=".ci/generated/ci-${{ matrix.doctype }}"
+            make -C "$project" verbose
+            test -s "$project/ci-${{ matrix.doctype }}.pdf"
+      - name: Upload ${{ matrix.doctype }} PDF
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pench-${{ matrix.doctype }}-pdf
+          path: .ci/generated/ci-${{ matrix.doctype }}/ci-${{ matrix.doctype }}.pdf
+          if-no-files-found: error
+      - name: Upload ${{ matrix.doctype }} TeX logs if the build fails
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pench-${{ matrix.doctype }}-logs
+          path: |
+            .ci/generated/ci-${{ matrix.doctype }}/tmp/build/*.log
+            .ci/generated/ci-${{ matrix.doctype }}/tmp/build/*.blg
+          if-no-files-found: ignore

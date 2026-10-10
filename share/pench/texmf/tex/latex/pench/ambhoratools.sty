@@ -1,0 +1,84 @@
+% --------------------------------------------------------------------------------------------------
+% SPDX-License-Identifier: Apache-2.0
+% Copyright (C) 2025 Jayesh Badwaik <jayesh@ambhora.com>
+% --------------------------------------------------------------------------------------------------
+
+% -- This package provides the tools for the documents which are specific to Ambhora.
+% -- For example, the control page etc.
+\ProvidesPackage{ambhoratools}
+\RequirePackage{expkv-opt,expkv-def}
+\DeclareKeys{license .store = \thisdoclicense,
+             license .usage = load}
+\SetKeys{license=by}
+
+\RequirePackage[
+  type={CC},
+  modifier={\thisdoclicense},
+  version={4.0},
+  hyphenation={RaggedRight}
+  ]{doclicense}
+
+
+
+% -- Common definitions for control page variables
+\providecommand{\@subject}{\@empty}
+\providecommand{\@title}{\@empty}
+\providecommand{\@subtitle}{\@empty}
+\providecommand{\@leadauthor}{\@empty}
+\providecommand{\@docid}{\@empty}
+\providecommand{\@version}{\@empty}
+\providecommand{\@author}{\@empty}
+
+\newcommand{\version}[1]{\gdef\@version{#1}}
+\newcommand{\docid}[1]{\gdef\@docid{#1}}
+
+\newcommand{\ambhoralogofile}{img/logo-color-transparent-edge.pdf}
+\newcommand{\ambhoraiconfile}{img/icon-color-transparent-edge.pdf}
+\newcommand{\ambhorawordmarkfile}{img/wordmark-color-transparent-edge.pdf}
+
+\makeatletter
+\newcommand{\ambhoracover}{
+\begin{titlepage}
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{\ambhoralogofile}
+\end{center}
+\vspace{1ex}
+\begin{center}
+  \begin{LARGE}
+    \texttt{\@docid{} / \@version{} / \@date{}}
+  \end{LARGE}
+\end{center}
+\vspace{2ex}
+\begin{center}
+\begin{Large}
+  \bfseries \@subject \par
+\end{Large}
+\end{center}
+\vspace{2ex}
+\begin{center}
+\begin{LARGE}
+   \bfseries \sffamily \@title \par
+\end{LARGE}
+\end{center}
+\begin{center}
+\begin{normalsize}
+\large \bfseries   \@subtitle \par
+\end{normalsize}
+\end{center}
+\vspace{2ex}
+\begin{center}
+  \begin{Large}
+    \@author \par
+  \end{Large}
+\end{center}
+\begin{center}
+  \begin{Large}
+    \PrintFormattedDate \par
+  \end{Large}
+\end{center}
+
+\vfill
+\doclicenseThis
+\end{titlepage}
+}
+\makeatother

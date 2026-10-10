@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025-2026 Pench contributors
+.coverage
+.coverage.*
+.pytest_cache/
+.venv/
+__pycache__/
+*.py[cod]
+dist/
+*.egg-info/
+tmp/
+.ci/

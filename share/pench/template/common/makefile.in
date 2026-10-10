@@ -1,0 +1,25 @@
+# The document name is rendered once by Pench.
+TITLE=@@slug@@
+BUILDIR=tmp/build
+LATEXMK=latexmk
+# IEEE conference: -pdf (pdfLaTeX + BibTeX); Pench: -lualatex (+ Biber when needed).
+BFLAGS=@@latexmk_engine@@
+IFLAGS=-interaction=nonstopmode -halt-on-error -file-line-error
+
+.PHONY: all debug verbose clean
+.SILENT: debug
+all: debug
+
+debug: ${TITLE}.tex
+	mkdir -p $(BUILDIR)
+	$(LATEXMK) $(BFLAGS) $(IFLAGS) -quiet -outdir=$(BUILDIR) ${TITLE}.tex
+	cp $(BUILDIR)/${TITLE}.pdf ${TITLE}.pdf
+
+verbose: ${TITLE}.tex
+	mkdir -p $(BUILDIR)
+	$(LATEXMK) $(BFLAGS) $(IFLAGS) -outdir=$(BUILDIR) ${TITLE}.tex
+	cp $(BUILDIR)/${TITLE}.pdf ${TITLE}.pdf
+
+clean:
+	$(LATEXMK) -C -outdir=$(BUILDIR) ${TITLE}.tex
+	rm -rf $(BUILDIR) ${TITLE}.pdf

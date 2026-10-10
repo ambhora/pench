@@ -1,0 +1,79 @@
+# --------------------------------------------------------------------------------------------------
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2025 Jayesh Badwaik <jayesh@ambhora.com>
+# --------------------------------------------------------------------------------------------------
+
+[project]
+name = "pench"
+dynamic = ["version"]
+description = "Scaffold reproducible LaTeX documents, including IEEE conference papers"
+readme = "readme.md"
+license = "Apache-2.0"
+authors = [
+{ name = "Jayesh Badwaik", email = "jayesh@ambhora.com" },
+]
+requires-python = ">=3.9"
+dependencies = [
+  "semver>=3,<4"
+]
+
+[project.urls]
+source = "https://gitlab.com/ambhora/software/pench"
+
+[project.scripts]
+pench = "pench.cli:main"
+
+# --------------------------------------------------------------------------------------------------
+# Hatch configuration
+# --------------------------------------------------------------------------------------------------
+[tool.hatch.version]
+path = "src/pench/metadata.py"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pench"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"share"="share"
+
+# --------------------------------------------------------------------------------------------------
+# PyTest configuration
+# --------------------------------------------------------------------------------------------------
+[tool.pytest.ini_options]
+pythonpath = ["src", "test"]
+testpaths = ["test"]
+addopts = "--cov=pench --cov-report term-missing --cov-fail-under=80"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-cov>=5", "hatchling>=1.25"]
+
+[tool.black]
+line-length = 100
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest>=6.3",
+  "pytest-cov"
+]
+
+
+[tool.hatch.envs.types]
+dependencies = [
+  "types-PyYAML",
+  "mypy",
+  "pytest",
+]
+
+[tool.hatch.envs.doc]
+dependencies = [
+  "mkdocs",
+  "mkdocstrings[python]",
+  "mkdocs-material",
+  "mkdocs-git-revision-date-localized-plugin",
+  "mike"
+]
+
+

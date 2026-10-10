@@ -1,0 +1,102 @@
+% --------------------------------------------------------------------------------------------------
+% SPDX-License-Identifier: Apache-2.0
+% Copyright (C) 2025 Jayesh Badwaik <jayesh@ambhora.com>
+% --------------------------------------------------------------------------------------------------
+
+% -- This package provides the tools for the documents which are specific to Ambhora.
+% -- For example, the control page etc.
+\ProvidesPackage{penchcontrol}
+\DeclareKeys
+{
+  license         .tl_set:N         = \penchcontrol@license,
+  license         .value_required:n = true,
+  docid           .tl_set:N         = \penchcontrol@docid,
+  docid           .value_required:n = true,
+  version         .tl_set:N         = \penchcontrol@version,
+  version         .value_required:n = true,
+  copyrightyear   .tl_set:N         = \penchcontrol@copyrightyear,
+  copyrightyear   .value_required:n = true,
+  copyrightholder .tl_set:N         = \penchcontrol@copyrightholder,
+  copyrightholder .value_required:n = true,
+}
+
+% -- Defaults, so that omitting an option leaves the macro defined rather than undefined.
+\providecommand{\penchcontrol@license}{LicenseRef-Unspecified}
+\providecommand{\penchcontrol@docid}{UNSPECIFIED}
+\providecommand{\penchcontrol@version}{0.1}
+\providecommand{\penchcontrol@copyrightyear}{\the\year}
+\providecommand{\penchcontrol@copyrightholder}{Ambhora}
+
+\ProcessKeyOptions
+
+% -- Common definitions for control page variables
+\providecommand{\@leadauthor}{\@empty}
+
+\newcommand{\ambhoralogofile}{penchassets/logo-color-transparent-edge.pdf}
+\newcommand{\ambhoraiconfile}{penchassets/icon-color-transparent-edge.pdf}
+\newcommand{\ambhoratextfile}{penchassets/text-color-transparent-edge.pdf}
+
+\RequirePackage{catchfile}
+
+% -- Resolve the human readable licence name from the SPDX identifier that was passed in.
+% -- Falls back to printing the identifier itself when no name file is installed.
+\edef\penchcontrol@licensefile{penchassets/penchspdx/\penchcontrol@license.licname}
+\IfFileExists{\penchcontrol@licensefile}
+  {\CatchFileDef{\penchlicensename}{\penchcontrol@licensefile}{}}
+  {\newcommand{\penchlicensename}{\penchcontrol@license}}
+
+\newcommand{\ambhoracontrol}{
+\begin{titlepage}
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{\ambhoralogofile}
+\end{center}
+\vspace{1ex}
+\begin{center}
+  \begin{LARGE}
+    \texttt{\penchcontrol@docid{} / v\,\penchcontrol@version{} / \@date{}}
+  \end{LARGE}
+\end{center}
+\vspace{2ex}
+\begin{center}
+\begin{Large}
+  \bfseries \@subject \par
+\end{Large}
+\end{center}
+\vspace{2ex}
+\begin{center}
+\begin{huge}
+   \bfseries \sffamily \@title \par
+\end{huge}
+\end{center}
+\begin{center}
+\begin{large}
+\large \sffamily \bfseries   \@subtitle \par
+\end{large}
+\end{center}
+\vspace{2ex}
+\begin{center}
+  \begin{Large}
+    \@author \par
+  \end{Large}
+\end{center}
+\begin{center}
+  \begin{Large}
+    \@date \par
+  \end{Large}
+\end{center}
+\vspace{8ex}
+\begin{center}
+  \begin{Large}
+    \@publishers \par
+  \end{Large}
+\end{center}
+\vfill
+\begin{center}
+  \begin{large}
+  Copyright \textcopyright{} \penchcontrol@copyrightyear{} \penchcontrol@copyrightholder{} \\[2ex]
+  Licensed under \penchlicensename{}
+  \end{large}
+\end{center}
+\end{titlepage}
+\setcounter{page}{1}
+}
